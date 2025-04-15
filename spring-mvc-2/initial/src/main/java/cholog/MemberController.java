@@ -9,8 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class MemberController {
@@ -18,42 +20,55 @@ public class MemberController {
     private final List<Member> members = new ArrayList<>();
     private final AtomicLong index = new AtomicLong(1);
 
+    /**
+     * ResponseEntity는 ResponseBody와 유사하지만 응답 상태나 헤더를 지정할 수 있다.
+     */
     @PostMapping("/members")
-    public ResponseEntity<Void> create() {
+    public ResponseEntity<Member> create(@RequestBody Member member) {
         // TODO: member 정보를 받아서 생성한다.
-        Member newMember = Member.toEntity(null, index.getAndIncrement());
+        Member newMember = Member.toEntity(member, index.getAndIncrement());
         members.add(newMember);
-        return ResponseEntity.created(URI.create("/members/" + newMember.getId())).build();
+        return ResponseEntity.created(URI.create("/members/" + newMember.getId()))
+                .body(member);
     }
 
+    /**
+     * 응답의 상태를 OK로 지정하고
+     * body에 members를 직렬화하여 담아 반환한다.
+     */
     @GetMapping("/members")
     public ResponseEntity<List<Member>> read() {
         // TODO: 저장된 모든 member 정보를 반환한다.
-        return null;
+        return ResponseEntity.ok()
+                .body(members);
     }
 
+    /**
+     * @PathVariable 애너테이션을 활용해서 URL 경로 변수를 메서드 파라미터의 변수로 바인딩한다.
+     * 경로 변수명과 바인딩되는 메서드 파라미터 변수명이 동일하면 name 속성을 생략할 수 있다.
+     */
     @PutMapping("/members/{id}")
-    public ResponseEntity<Void> update() {
+    public ResponseEntity<Void> update(@PathVariable(name = "id") long id, @RequestBody Member newMember) {
         // TODO: member의 수정 정보와 url 상의 id 정보를 받아 member 정보를 수정한다.
         Member member = members.stream()
-            .filter(it -> Objects.equals(it.getId(), null))
+            .filter(it -> Objects.equals(it.getId(), id))
             .findFirst()
             .orElseThrow(RuntimeException::new);
 
-        member.update(null);
-        return null;
+        member.update(newMember);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/members/{id}")
-    public ResponseEntity<Void> delete() {
+    public ResponseEntity<Void> delete(@PathVariable long id) {
         // TODO: url 상의 id 정보를 받아 member를 삭제한다.
         Member member = members.stream()
-            .filter(it -> Objects.equals(it.getId(), null))
+            .filter(it -> Objects.equals(it.getId(), id))
             .findFirst()
             .orElseThrow(RuntimeException::new);
 
         members.remove(member);
 
-        return null;
+        return ResponseEntity.noContent().build();
     }
 }

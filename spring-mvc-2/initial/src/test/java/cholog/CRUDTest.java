@@ -12,6 +12,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class CRUDTest {
+    /**
+     * MemberController#create
+     */
     @Test
     void create() {
         var response = RestAssured
@@ -24,6 +27,9 @@ class CRUDTest {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
     }
 
+    /**
+     * MemberController#read
+     */
     @Test
     void read() {
         create();
@@ -38,6 +44,9 @@ class CRUDTest {
         assertThat(response.jsonPath().getList("", Member.class)).hasSize(1);
     }
 
+    /**
+     * MemberController#update
+     */
     @Test
     void update() {
         create();
@@ -52,6 +61,9 @@ class CRUDTest {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 
+    /**
+     * MemberController#delete
+     */
     @Test
     void delete() {
         create();

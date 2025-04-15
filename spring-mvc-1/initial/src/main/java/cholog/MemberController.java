@@ -25,7 +25,7 @@ public class MemberController {
 
     /**
      * @ResponseBody 애너테이션을 사용하면
-     * 반환값을 HttpMessageConverter로 역직렬화한 뒤 response-body에 담아 반환할 수 있다.
+     * 반환값을 HttpMessageConverter로 직렬화한 뒤 response-body에 담아 반환할 수 있다.
      */
     @GetMapping("/json")
     @ResponseBody
