@@ -10,6 +10,9 @@ import org.springframework.http.HttpStatus;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 class ResponseJsonTest {
 
+    /**
+     * MemberController#json
+     */
     @Test
     void responseJson() {
         var response = RestAssured

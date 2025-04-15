@@ -10,6 +10,9 @@ import org.springframework.http.HttpStatus;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 class ResponseTemplatesTest {
 
+    /**
+     * MemberController#world
+     */
     @Test
     void responseTemplatesHelloPage() {
         var response = RestAssured
