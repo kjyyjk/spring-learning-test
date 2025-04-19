@@ -35,13 +35,18 @@ public class QueryingDaoTest {
         jdbcTemplate.batchUpdate("INSERT INTO customers(first_name, last_name) VALUES (?,?)", splitUpNames);
     }
 
+    /**
+     * QueryingDAO#count()
+     */
     @Test
     void count() {
         int count = queryingDAO.count();
-
         assertThat(count).isEqualTo(4);
     }
 
+    /**
+     * QueryingDAO#getLastName()
+     */
     @Test
     void getLastName() {
         String lastName = queryingDAO.getLastName(1L);
@@ -49,6 +54,9 @@ public class QueryingDaoTest {
         assertThat(lastName).isEqualTo("Woo");
     }
 
+    /**
+     * QueryingDAO#findCustomerById()
+     */
     @Test
     void findCustomerById() {
         Customer customer = queryingDAO.findCustomerById(1L);
@@ -57,6 +65,9 @@ public class QueryingDaoTest {
         assertThat(customer.getLastName()).isEqualTo("Woo");
     }
 
+    /**
+     * QueryingDAO#findAllCustomers()
+     */
     @Test
     void findAllCustomers() {
         List<Customer> customers = queryingDAO.findAllCustomers();
@@ -64,6 +75,9 @@ public class QueryingDaoTest {
         assertThat(customers).hasSize(4);
     }
 
+    /**
+     * QueryingDAO#findCustomerByFirstName()
+     */
     @Test
     void findCustomerByFirstName() {
         List<Customer> customers = queryingDAO.findCustomerByFirstName("Josh");

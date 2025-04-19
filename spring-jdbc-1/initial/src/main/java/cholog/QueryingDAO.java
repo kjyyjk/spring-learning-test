@@ -26,38 +26,65 @@ public class QueryingDAO {
     추후 rowMapper에 대해 학습해보고 이용해보기
     */
 
+
     /**
      * public <T> T queryForObject(String sql, Class<T> requiredType)
+     * <p>
+     * 한개만 조회할 경우 queryForObject를 사용할 수 있다. 첫번째 인자로 실행할 쿼리문, 두번째 인자로 쿼리 결과를 매핑할 타입
      */
     public int count() {
         //TODO : customers 디비에 포함되어있는 row가 몇개인지 확인하는 기능 구현
-        return 0;
+        String query = "select count(*) from customers";
+        int rowCount = jdbcTemplate.queryForObject(query, Integer.class);
+        return rowCount;
     }
 
     /**
      * public <T> T queryForObject(String sql, Class<T> requiredType, @Nullable Object... args)
+     * <p>
+     * 첫번째 인자로 쿼리문, 두번째 인자로 매핑할 타입, 세번째 인자로 쿼리문 파라미터
      */
     public String getLastName(Long id) {
         //TODO : 주어진 Id에 해당하는 customers의 lastName을 반환
-        return null;
+        String query = "select last_name from customers where id = ?";
+        return jdbcTemplate.queryForObject(query, String.class, id);
     }
 
     /**
      * public <T> T queryForObject(String sql, RowMapper<T> rowMapper, @Nullable Object... args)
+     * <p>
+     * 여러 컬럼을 하나의 클래스 타입으로 매핑하려면 rowMapper를 활용해야한다. 안그러면 예외가 발생한다. "예외 메세지 : 컬럼이 1개여야하는데 3개네?"
+     * <p>
+     * RowMapper 함수형 인터페이스를 활용하면 매핑 가능하다. RowMapper<T>는 ResultSet의 row를 T클래스 타입으로 매핑한다.
      */
     public Customer findCustomerById(Long id) {
         String sql = "select id, first_name, last_name from customers where id = ?";
         //TODO : 주어진 Id에 해당하는 customer를 객체로 반환
-        return null;
+        RowMapper<Customer> rowMapper = (resultSet, rowNum) -> {
+            return new Customer(
+                    resultSet.getLong("id"),
+                    resultSet.getString("first_name"),
+                    resultSet.getString("last_name")
+            );
+        };
+        return jdbcTemplate.queryForObject(sql, rowMapper, id);
     }
 
     /**
      * public <T> List<T> query(String sql, RowMapper<T> rowMapper)
+     * <p>
+     * 여러개 조회 시 JdbcTemplate#query
      */
     public List<Customer> findAllCustomers() {
         String sql = "select id, first_name, last_name from customers";
         //TODO : 저장된 모든 Customers를 list형태로 반환
-        return null;
+        return jdbcTemplate.query(sql, (resultSet, rowNum) -> {
+            return new Customer(
+                    resultSet.getLong("id"),
+                    resultSet.getString("first_name"),
+                    resultSet.getString("last_name")
+            );
+        });
     }
 
     /**
@@ -66,6 +93,13 @@ public class QueryingDAO {
     public List<Customer> findCustomerByFirstName(String firstName) {
         String sql = "select id, first_name, last_name from customers where first_name = ?";
         //TODO : firstName을 기준으로 customer를 list형태로 반환
-        return null;
+        RowMapper<Customer> rowMapper = (resultSet, rowNum) -> {
+            return new Customer(
+                    resultSet.getLong("id"),
+                    resultSet.getString("first_name"),
+                    resultSet.getString("last_name")
+            );
+        };
+        return jdbcTemplate.query(sql, rowMapper, firstName);
     }
 }

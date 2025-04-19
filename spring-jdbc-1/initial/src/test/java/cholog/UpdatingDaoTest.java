@@ -37,6 +37,9 @@ public class UpdatingDaoTest {
         jdbcTemplate.batchUpdate("INSERT INTO customers(first_name, last_name) VALUES (?,?)", splitUpNames);
     }
 
+    /**
+     * UpdatingDAO#insert()
+     */
     @Test
     void insert() {
         Customer customer = new Customer("Leonor", "Watling");
@@ -47,6 +50,9 @@ public class UpdatingDaoTest {
         assertThat(customers).hasSize(1);
     }
 
+    /**
+     * UpdatingDAO#delete()
+     */
     @Test
     void delete() {
         int rowNum = updatingDAO.delete(1L);
@@ -54,6 +60,9 @@ public class UpdatingDaoTest {
         assertThat(rowNum).isEqualTo(1);
     }
 
+    /**
+     * UpdatingDAO#insertWithKeyHolder()
+     */
     @Test
     void keyHolder() {
         Customer customer = new Customer("Leonor", "Watling");
