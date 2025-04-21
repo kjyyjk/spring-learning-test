@@ -10,6 +10,14 @@ public class AutowiredBean {
      */
     private SpringBean springBean;
 
+    /**
+     * 생성자가 하나만 있는 경우에는 @Autowired를 생략할 수 있다.
+     */
+    @Autowired
+    public AutowiredBean(SpringBean springBean) {
+        this.springBean = springBean;
+    }
+
     public String sayHello() {
         return springBean.hello();
     }

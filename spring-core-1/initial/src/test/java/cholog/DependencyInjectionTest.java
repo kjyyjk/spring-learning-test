@@ -10,6 +10,9 @@ import static cholog.utils.ContextUtils.getApplicationContext;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DependencyInjectionTest {
+    /**
+     * https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-collaborators.html#beans-constructor-injection
+     */
     @Test
     void constructorInjection() {
         ApplicationContext context = getApplicationContext();
@@ -17,6 +20,9 @@ public class DependencyInjectionTest {
         assertThat(service.sayHello()).isEqualTo("Hello");
     }
 
+    /**
+     * https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-collaborators.html#beans-setter-injection
+     */
     @Test
     void setterInjection() {
         ApplicationContext context = getApplicationContext();
